@@ -126,10 +126,17 @@ void Application::Display(void)
 	// Clear the screen
 	ClearScreen();
 
+
+	static DWORD DStartingTime = GetTickCount();
+	DWORD DCurrentTime = GetTickCount();
+	DWORD DDelta = DCurrentTime - DStartingTime;
+	float fTimer = static_cast<float>(DDelta / 1000.0f);
+	std::cout << fTimer << std::endl;
+
+
 	matrix4 m4View = m_pCameraMngr->GetViewMatrix();
 	matrix4 m4Projection = m_pCameraMngr->GetProjectionMatrix();
-	
-	
+
 	// Makes the alien bounce from side to side on the screen
 	if (5.0f + value > 19.0f && goingRight)
 		goingRight = false;
