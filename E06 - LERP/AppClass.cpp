@@ -54,17 +54,30 @@ void Application::Display(void)
 	//calculate the current position
 	vector3 v3CurrentPos;
 	
-
-
-
-
 	//your code goes here
-	v3CurrentPos = vector3(0.0f, 0.0f, 0.0f);
+	vector3 startPos;
+	vector3 endPos;
+	static int index = 0;
+	static float distance = 0.0f;
+	startPos = m_stopsList[index];
+	endPos = m_stopsList[(index + 1) % m_stopsList.size()];
+
+	v3CurrentPos = glm::lerp(startPos, endPos, distance);
+
+	// Sets up for the next step
+	if (distance >= 1.0f) {
+		index++;
+		distance = 0.0f;
+		index %= m_stopsList.size();
+	}
+	else
+		distance += 0.02f;
+
+	// Restarts clock when it starts the first step
+	if (index == 0 && distance <= 0.02f)
+		fTimer = m_pSystem->GetDeltaTime(uClock);
 	//-------------------
-	
 
-
-	
 	matrix4 m4Model = glm::translate(v3CurrentPos);
 	m_pModel->SetModelMatrix(m4Model);
 
