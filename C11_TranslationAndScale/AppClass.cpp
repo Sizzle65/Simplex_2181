@@ -137,9 +137,9 @@ void Application::Display(void)
 		goingRight = true;
 
 	if (goingRight)
-		value += 0.05f;
+		value += 0.1f;
 	else
-		value -= 0.05f;
+		value -= 0.1f;
 
 	m_pMesh->Render(m4Projection, m4View, glm::translate(IDENTITY_M4, vector3(-3.0f + value, 5.0f, -5.0f)));
 	m_pMesh1->Render(m4Projection, m4View, glm::translate(IDENTITY_M4, vector3(3.0f + value, 5.0f, -5.0f)));
