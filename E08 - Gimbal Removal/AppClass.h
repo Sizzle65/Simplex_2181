@@ -19,7 +19,11 @@ class Application
 	vector3 m_v3Rotation;
 	MyMesh* m_pMesh = nullptr;
 	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
-
+	vector3 m_v3Angles = vector3(0.0f);
+	bool b_xSpin = false;
+	bool b_ySpin = false;
+	bool b_zSpin = false;
+	vector3 m_v3Quat = vector3(0.0f);
 private:
 	static ImGuiObject gui; //GUI object
 
