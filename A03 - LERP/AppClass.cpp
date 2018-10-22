@@ -17,10 +17,10 @@ void Application::InitVariables(void)
 	{
 		m_v4ClearColor = vector4(ZERO_V3, 1.0f);
 	}
-	
 	//if there are no segments create 7
 	if(m_uOrbits < 1)
 		m_uOrbits = 7;
+
 
 	float fSize = 1.0f; //initial size of orbits
 
