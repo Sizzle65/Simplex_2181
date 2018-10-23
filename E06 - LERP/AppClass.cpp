@@ -72,7 +72,6 @@ void Application::Display(void)
 	}
 	else
 		distance += 0.02f;
-
 	// Restarts clock when it starts the first step
 	if (index == 0 && distance <= 0.02f)
 		fTimer = m_pSystem->GetDeltaTime(uClock);

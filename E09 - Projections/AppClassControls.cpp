@@ -435,6 +435,30 @@ void Application::ProcessKeyboard(void)
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		m_pCameraMngr->MoveVertical(fSpeed);
+
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+		m_uProjection = 1;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+		m_uProjection = 2;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+		m_uProjection = 3;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+		m_uProjection = 4;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
+		m_uProjection = 5;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
+		m_uProjection = 6;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7))
+		m_uProjection = 7;
+
+
 #pragma endregion
 }
 //Joystick
