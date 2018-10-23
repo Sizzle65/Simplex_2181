@@ -10,6 +10,9 @@ void Application::InitVariables(void)
 
 	//Load a model
 	m_pModel->Load("Minecraft\\Steve.obj");
+
+	m_pMesh = new MyMesh();
+	m_pMesh->GenerateCube(2.0f,C_RED);
 }
 void Application::Update(void)
 {
@@ -60,27 +63,49 @@ void Application::Update(void)
 
 	//Send the model to render list
 	m_pModel->AddToRenderList();
+
+	
 }
 void Application::Display(void)
 {
 	// Clear the screen
 	ClearScreen();
-	
-	// draw a skybox
-	m_pMeshMngr->AddSkyboxToRenderList();
-	
-	matrix4 m4Projection = m_pCameraMngr->GetProjectionMatrix();
 	matrix4 m4View = m_pCameraMngr->GetViewMatrix();
+	matrix4 m4Projection = m_pCameraMngr->GetProjectionMatrix();
 
+	//m4Projection = glm::ortho(-7.5f,7.5f,-5.0f,5.0f,0.01f,20.0f);
 	float fovy = 45.0f; // field of view
 	//float aspect = 1080.0f / 720.0f; // aspect ratio
 	float aspect = m_pSystem->GetWindowWidth() / m_pSystem->GetWindowHeight(); // aspect ratio
-	float zNear = 0.0001f; // near clipping plane
-	float zFar = 1000.0f; // far clipping plane
-	m4Projection = glm::perspective(fovy, aspect, zNear, zFar);
+	float zNear = 0.01f; // near clipping plane
+	float zFar = 20.0f; // far clipping plane
+	m4Projection = glm::perspective(fovy,aspect,zNear,zFar);
+	matrix4 m4Model = IDENTITY_M4;
 
-	m_pCameraMngr->SetProjectionMatrix(m4Projection);
+	vector3 v3Position = vector3(0.0f,0.0f,-10.0f);
+	vector3 v3Target;
+	vector3 v3Up = vector3(0.0f,1.0f,0.0f);
+
+	m4View = glm::lookAt(v3Position, v3Target,v3Up);
+
+	//m_pMesh->Render(m4Projection, m4View, m4Model);
 	m_pCameraMngr->SetViewMatrix(m4View);
+	m_pCameraMngr->SetProjectionMatrix(m4Projection);
+	// draw a skybox
+	m_pMeshMngr->AddSkyboxToRenderList();
+	
+	//matrix4 m4Projection = m_pCameraMngr->GetProjectionMatrix();
+	//Smatrix4 m4View = m_pCameraMngr->GetViewMatrix();
+
+	//float fovy = 45.0f; // field of view
+	//float aspect = 1080.0f / 720.0f; // aspect ratio
+	//float aspect = m_pSystem->GetWindowWidth() / m_pSystem->GetWindowHeight(); // aspect ratio
+	//float zNear = 0.0001f; // near clipping plane
+	//float zFar = 1000.0f; // far clipping plane
+	//m4Projection = glm::perspective(fovy, aspect, zNear, zFar);
+
+	//m_pCameraMngr->SetProjectionMatrix(m4Projection);
+	//m_pCameraMngr->SetViewMatrix(m4View);
 
 	//render list call
 	m_uRenderCallCount = m_pMeshMngr->Render();
@@ -98,6 +123,8 @@ void Application::Release(void)
 {
 	//release model
 	SafeDelete(m_pModel);
+
+	SafeDelete(m_pMesh);
 
 	//release GUI
 	ShutdownGUI();
