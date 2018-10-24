@@ -152,11 +152,39 @@ void Simplex::MyCamera::CalculateProjectionMatrix(void)
 
 void MyCamera::MoveForward(float a_fDistance)
 {
-	//The following is just an example and does not take in account the forward vector (AKA view vector)
-	m_v3Position += vector3(0.0f, 0.0f,-a_fDistance);
-	m_v3Target += vector3(0.0f, 0.0f, -a_fDistance);
-	m_v3Above += vector3(0.0f, 0.0f, -a_fDistance);
+	m_v3Position += glm::normalize(m_v3Target - m_v3Position) * a_fDistance;
+	m_v3Target += glm::normalize(m_v3Target - m_v3Position) * a_fDistance;
 }
 
-void MyCamera::MoveVertical(float a_fDistance){}//Needs to be defined
-void MyCamera::MoveSideways(float a_fDistance){}//Needs to be defined
+void MyCamera::MoveVertical(float a_fDistance)
+{
+	for (int i = 0; i < 4; i++) {
+		for (int x = 0; x < 4; x++) {
+			std::cout << m_m4View[x][i] << "\t";
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+	m_v3Position += vector3(0.0f, a_fDistance, 0);
+	m_v3Target += vector3(0.0f, a_fDistance, 0);
+	m_v3Above += vector3(0.0f, a_fDistance, 0);
+}
+void MyCamera::MoveSideways(float a_fDistance)
+{
+	vector3 forward = glm::normalize(m_v3Target - m_v3Position);
+	vector3 direction = vector3(0.0f);
+	if (a_fDistance >= 0) {
+		direction = glm::cross(forward, m_v3Above);
+		direction = glm::normalize(direction);
+	}
+	else {
+		direction = glm::cross(m_v3Above, forward);
+		direction = glm::normalize(direction);
+
+	}
+	a_fDistance = glm::abs(a_fDistance);
+	m_v3Position += direction * a_fDistance;
+	m_v3Target += direction * a_fDistance;
+
+
+}
