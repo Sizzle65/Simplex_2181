@@ -124,7 +124,7 @@ void Simplex::MyCamera::SetPositionTargetAndUpward(vector3 a_v3Position, vector3
 	m_v3Target = a_v3Target;
 
 	m_v3Above = a_v3Position + glm::normalize(a_v3Upward);
-	
+
 	//Calculate the Matrix
 	CalculateProjectionMatrix();
 }
@@ -154,6 +154,8 @@ void MyCamera::MoveForward(float a_fDistance)
 {
 	m_v3Position += glm::normalize(m_v3Target - m_v3Position) * a_fDistance;
 	m_v3Target += glm::normalize(m_v3Target - m_v3Position) * a_fDistance;
+	m_v3Above += glm::normalize(m_v3Target - m_v3Position) * a_fDistance;
+
 }
 
 void MyCamera::MoveVertical(float a_fDistance)
@@ -172,19 +174,19 @@ void MyCamera::MoveVertical(float a_fDistance)
 void MyCamera::MoveSideways(float a_fDistance)
 {
 	vector3 forward = glm::normalize(m_v3Target - m_v3Position);
-	vector3 direction = vector3(0.0f);
-	if (a_fDistance >= 0) {
-		direction = glm::cross(forward, m_v3Above);
-		direction = glm::normalize(direction);
-	}
-	else {
-		direction = glm::cross(m_v3Above, forward);
-		direction = glm::normalize(direction);
+	vector3 right = glm::normalize(glm::cross(m_v3Above, forward));
 
-	}
-	a_fDistance = glm::abs(a_fDistance);
-	m_v3Position += direction * a_fDistance;
-	m_v3Target += direction * a_fDistance;
+	m_v3Position += (right * a_fDistance);
+	m_v3Target += (right * a_fDistance);
+	//m_v3Above += (right * a_fDistance);
+	
 
+	/*
+	std::cout << "Right - X : " << right.x << "\tY : " << right.y << "\tZ : " << right.z << std::endl;
+	std::cout << "Target - X : " << m_v3Target.x << "\tY : " << m_v3Target.y << "\tZ : " << m_v3Target.z << std::endl;
+	std::cout << "Forward - X : " << forward.x << "\tY : " << forward.y << "\tZ : " << forward.z << std::endl;
+	std::cout << "Position - X : " << m_v3Position.x << "\tY : " << m_v3Position.y << "\tZ : " << m_v3Position.z << std::endl;
 
+	std::cout << "Above - X : " << m_v3Above.x << "\tY : " << m_v3Above.y << "\tZ : " << m_v3Above.z << std::endl;
+	std::cout << std::endl;*/
 }
