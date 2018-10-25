@@ -152,41 +152,38 @@ void Simplex::MyCamera::CalculateProjectionMatrix(void)
 
 void MyCamera::MoveForward(float a_fDistance)
 {
+	// increments all necessary vectors by the forward vector
 	m_v3Position += glm::normalize(m_v3Target - m_v3Position) * a_fDistance;
 	m_v3Target += glm::normalize(m_v3Target - m_v3Position) * a_fDistance;
 	m_v3Above += glm::normalize(m_v3Target - m_v3Position) * a_fDistance;
-
 }
 
 void MyCamera::MoveVertical(float a_fDistance)
 {
-	for (int i = 0; i < 4; i++) {
-		for (int x = 0; x < 4; x++) {
-			std::cout << m_m4View[x][i] << "\t";
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
-	m_v3Position += vector3(0.0f, a_fDistance, 0);
-	m_v3Target += vector3(0.0f, a_fDistance, 0);
-	m_v3Above += vector3(0.0f, a_fDistance, 0);
+	// Grabs the up vector and increments all the necessary vectors
+	vector3 up = glm::normalize(m_v3Above - m_v3Position);
+	m_v3Position += up * a_fDistance;
+	m_v3Target += up * a_fDistance;
+	m_v3Above += up * a_fDistance;
 }
 void MyCamera::MoveSideways(float a_fDistance)
 {
+	// Grabs the up, forward and left vectors
 	vector3 forward = glm::normalize(m_v3Target - m_v3Position);
-	vector3 right = glm::normalize(glm::cross(m_v3Above, forward));
+	vector3 up = glm::normalize(m_v3Above - m_v3Position);
+	vector3 left = glm::normalize(glm::cross(up, forward));
 
-	m_v3Position += (right * a_fDistance);
-	m_v3Target += (right * a_fDistance);
-	//m_v3Above += (right * a_fDistance);
-	
-
-	/*
-	std::cout << "Right - X : " << right.x << "\tY : " << right.y << "\tZ : " << right.z << std::endl;
-	std::cout << "Target - X : " << m_v3Target.x << "\tY : " << m_v3Target.y << "\tZ : " << m_v3Target.z << std::endl;
-	std::cout << "Forward - X : " << forward.x << "\tY : " << forward.y << "\tZ : " << forward.z << std::endl;
-	std::cout << "Position - X : " << m_v3Position.x << "\tY : " << m_v3Position.y << "\tZ : " << m_v3Position.z << std::endl;
-
-	std::cout << "Above - X : " << m_v3Above.x << "\tY : " << m_v3Above.y << "\tZ : " << m_v3Above.z << std::endl;
-	std::cout << std::endl;*/
+	// increments all the necessary vectors by the left vector
+	m_v3Position -= (left * a_fDistance);
+	m_v3Target -= (left * a_fDistance);
+	m_v3Above -= (left * a_fDistance);
 }
+
+void Simplex::MyCamera::ChangeRotation(float angleX, float angleY)
+{
+	//Rotates using euler angles, I tried for quite a long time to get rid of gimbal lock, couldn't do it, definitely just forgetting some core ideas
+	vector3 rot = vector3(-angleY , -angleX,0.0f);
+
+	m_v3Target += rot;
+}
+
