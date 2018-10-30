@@ -17,7 +17,6 @@ void Application::InitVariables(void)
 	m_pMyMeshMngr = MyMeshManager::GetInstance();
 	m_pMyMeshMngr->SetCamera(m_pCamera);
 	
-	
 }
 void Application::Update(void)
 {
