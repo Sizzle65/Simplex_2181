@@ -124,7 +124,7 @@ void Simplex::MyCamera::SetPositionTargetAndUpward(vector3 a_v3Position, vector3
 	m_v3Target = a_v3Target;
 
 	m_v3Above = a_v3Position + glm::normalize(a_v3Upward);
-	
+
 	//Calculate the Matrix
 	CalculateProjectionMatrix();
 }
@@ -152,11 +152,38 @@ void Simplex::MyCamera::CalculateProjectionMatrix(void)
 
 void MyCamera::MoveForward(float a_fDistance)
 {
-	//The following is just an example and does not take in account the forward vector (AKA view vector)
-	m_v3Position += vector3(0.0f, 0.0f,-a_fDistance);
-	m_v3Target += vector3(0.0f, 0.0f, -a_fDistance);
-	m_v3Above += vector3(0.0f, 0.0f, -a_fDistance);
+	// increments all necessary vectors by the forward vector
+	m_v3Position += glm::normalize(m_v3Target - m_v3Position) * a_fDistance;
+	m_v3Target += glm::normalize(m_v3Target - m_v3Position) * a_fDistance;
+	m_v3Above += glm::normalize(m_v3Target - m_v3Position) * a_fDistance;
 }
 
-void MyCamera::MoveVertical(float a_fDistance){}//Needs to be defined
-void MyCamera::MoveSideways(float a_fDistance){}//Needs to be defined
+void MyCamera::MoveVertical(float a_fDistance)
+{
+	// Grabs the up vector and increments all the necessary vectors
+	vector3 up = glm::normalize(m_v3Above - m_v3Position);
+	m_v3Position += up * a_fDistance;
+	m_v3Target += up * a_fDistance;
+	m_v3Above += up * a_fDistance;
+}
+void MyCamera::MoveSideways(float a_fDistance)
+{
+	// Grabs the up, forward and left vectors
+	vector3 forward = glm::normalize(m_v3Target - m_v3Position);
+	vector3 up = glm::normalize(m_v3Above - m_v3Position);
+	vector3 left = glm::normalize(glm::cross(up, forward));
+
+	// increments all the necessary vectors by the left vector
+	m_v3Position -= (left * a_fDistance);
+	m_v3Target -= (left * a_fDistance);
+	m_v3Above -= (left * a_fDistance);
+}
+
+void Simplex::MyCamera::ChangeRotation(float angleX, float angleY)
+{
+	//Rotates using euler angles, I tried for quite a long time to get rid of gimbal lock, couldn't do it, definitely just forgetting some core ideas
+	vector3 rot = vector3(-angleY , -angleX,0.0f);
+
+	m_v3Target += rot;
+}
+
