@@ -272,21 +272,71 @@ void MyRigidBody::AddToRenderList(void)
 		else
 			m_pMeshMngr->AddWireCubeToRenderList(glm::translate(GetCenterGlobal()) * glm::scale(m_v3ARBBSize), C_YELLOW);
 	}
+	
+
 }
 
 uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 {
-	/*
-	Your code goes here instead of this comment;
 
-	For this method, if there is an axis that separates the two objects
-	then the return will be different than 0; 1 for any separating axis
-	is ok if you are not going for the extra credit, if you could not
-	find a separating axis you need to return 0, there is an enum in
-	Simplex that might help you [eSATResults] feel free to use it.
-	(eSATResults::SAT_NONE has a value of 0)
+	vector3 rA, rB;
+	//vector3 translation = vector3(a_pOther->m_m4ToWorld * vector4(a_pOther->m_v3Center,1.0f)) - vector3(m_m4ToWorld * vector4(m_v3Center, 1.0f));
+	
+
+	// Grab the 6 axes
+	vector3 aX = vector3(vector4(AXIS_X, 1.0f) * m_m4ToWorld);
+	vector3 aY = vector3(vector4(AXIS_Y, 1.0f) * m_m4ToWorld);
+	vector3 aZ = vector3(vector4(AXIS_Z, 1.0f) * m_m4ToWorld);
+
+	vector3 bX = vector3(vector4(AXIS_X, 1.0f) * a_pOther->m_m4ToWorld);
+	vector3 bY = vector3(vector4(AXIS_Y, 1.0f) * a_pOther->m_m4ToWorld);
+	vector3 bZ = vector3(vector4(AXIS_Z, 1.0f) * a_pOther->m_m4ToWorld);
+
+
+	
+	// Grab the distance from the two centers and get a dot product for it on the three axis'
+	vector3 translation = vector3(a_pOther->m_m4ToWorld * vector4(a_pOther->m_v3Center, 1.0f)) - vector3(m_m4ToWorld * vector4(m_v3Center, 1.0f));
+	translation = vector3(glm::dot(translation, aX), glm::dot(translation, aY), glm::dot(translation, aZ));
+
+
+	/*
+		This is absolutely wrong and I have no idea what the right way of solving for rA and rB is
+		I do know you have to get the value of the projected radii for both models, I just don't know how
 	*/
+	rA = m_v3HalfWidth - m_v3Center;
+	rB = a_pOther->m_v3HalfWidth - a_pOther->m_v3Center;
+
+	//rA = vector3(vector4(m_v3HalfWidth, 1.0f) * m_m4ToWorld);
+	//rB = vector3(vector4(a_pOther->m_v3HalfWidth, 1.0f) * a_pOther->m_m4ToWorld);
+
+	// 15 Separation plane checks
+	if (glm::abs(glm::dot(aX, translation)) > glm::dot(aX, rA) + glm::dot(aX, rB)) return 0;
+	if (glm::abs(glm::dot(aY, translation)) > glm::dot(aY, rA) + glm::dot(aY, rB)) return 0;
+	if (glm::abs(glm::dot(aZ, translation)) > glm::dot(aZ, rA) + glm::dot(aZ, rB)) return 0;
+
+	if (glm::abs(glm::dot(bX, translation)) > glm::dot(bX, rA) + glm::dot(bX, rB)) return 0;
+	if (glm::abs(glm::dot(bY, translation)) > glm::dot(bY, rA) + glm::dot(bY, rB)) return 0;
+	if (glm::abs(glm::dot(bZ, translation)) > glm::dot(bZ, rA) + glm::dot(bZ, rB)) return 0;
+
+	if (glm::abs(glm::dot(glm::cross(aX, bX), translation)) > glm::dot(glm::cross(aX, bX), rA) + glm::dot(glm::cross(aX, bX), rB)) return 0;
+	if (glm::abs(glm::dot(glm::cross(aX, bY), translation)) > glm::dot(glm::cross(aX, bY), rA) + glm::dot(glm::cross(aX, bY), rB)) return 0;
+	if (glm::abs(glm::dot(glm::cross(aX, bZ), translation)) > glm::dot(glm::cross(aX, bZ), rA) + glm::dot(glm::cross(aX, bZ), rB)) return 0;
+
+	if (glm::abs(glm::dot(glm::cross(aY, bX), translation)) > glm::dot(glm::cross(aY, bX), rA) + glm::dot(glm::cross(aY, bX), rB)) return 0;
+	if (glm::abs(glm::dot(glm::cross(aY, bY), translation)) > glm::dot(glm::cross(aY, bY), rA) + glm::dot(glm::cross(aY, bY), rB)) return 0;
+	if (glm::abs(glm::dot(glm::cross(aY, bZ), translation)) > glm::dot(glm::cross(aY, bZ), rA) + glm::dot(glm::cross(aY, bZ), rB)) return 0;
+
+	if (glm::abs(glm::dot(glm::cross(aZ, bX), translation)) > glm::dot(glm::cross(aZ, bX), rA) + glm::dot(glm::cross(aZ, bX), rB)) return 0;
+	if (glm::abs(glm::dot(glm::cross(aZ, bY), translation)) > glm::dot(glm::cross(aZ, bY), rA) + glm::dot(glm::cross(aZ, bY), rB)) return 0;
+	if (glm::abs(glm::dot(glm::cross(aZ, bZ), translation)) > glm::dot(glm::cross(aZ, bZ), rA) + glm::dot(glm::cross(aZ, bZ), rB)) return 0;
+
+	//std::cout << "X: " << translation.x << " Y: " << translation.y << " Z: " << translation.z << std::endl;
+	//std::cout << "X: " << rA.x << " Y: " << rA.y << " Z: " << rA.z << std::endl;
+	//std::cout << glm::dot(aX, rA) << std::endl;
+	//std::cout << glm::abs(glm::dot(aX, rA)) + glm::abs(glm::dot(aX, rB)) << std::endl;
+	//std::cout << glm::abs(glm::dot(aX, translation)) << std::endl;
+	//std::cout << glm::dot(aX, rA) << std::endl;
 
 	//there is no axis test that separates this two objects
-	return eSATResults::SAT_NONE;
+	return 1;
 }

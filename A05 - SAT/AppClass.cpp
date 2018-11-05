@@ -22,6 +22,8 @@ void Application::InitVariables(void)
 	m_pSteve = new Model();
 	m_pSteve->Load("Minecraft\\Steve.obj");
 	m_pSteveRB = new MyRigidBody(m_pSteve->GetVertexList());
+
+	
 }
 void Application::Update(void)
 {
