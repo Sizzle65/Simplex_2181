@@ -16,7 +16,7 @@ class MyRigidBody
 	MeshManager* m_pMeshMngr = nullptr; //for displaying the Rigid Body
 
 	bool m_bVisible = true; //Visibility
-
+	
 	float m_fRadius = 0.0f; //Radius
 
 	vector3 m_v3Color = C_WHITE; //Color
@@ -25,8 +25,8 @@ class MyRigidBody
 	vector3 m_v3MinL = vector3(0.0f); //minimum coordinate in local space
 	vector3 m_v3MaxL = vector3(0.0f); //maximum coordinate in local space
 
-	vector3 m_v3MinG = vector3(0.0f); //minimum coordinate in local space
-	vector3 m_v3MaxG = vector3(0.0f); //maximum coordinate in local space
+	vector3 m_v3MinG = vector3(0.0f); //minimum coordinate in global space
+	vector3 m_v3MaxG = vector3(0.0f); //maximum coordinate in global space
 
 	vector3 m_v3HalfWidth = vector3(0.0f); //half the size of all sides
 
