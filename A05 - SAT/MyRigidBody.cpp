@@ -276,16 +276,27 @@ void MyRigidBody::AddToRenderList(void)
 
 uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 {
-	/*
-	Your code goes here instead of this comment;
+	struct OBB {
+		vector3 c; // global center
+		vector3 u[3]; // axes
+		vector3 e; // Halfwidth
+	};
 
-	For this method, if there is an axis that separates the two objects
-	then the return will be different than 0; 1 for any separating axis
-	is ok if you are not going for the extra credit, if you could not
-	find a separating axis you need to return 0, there is an enum in
-	Simplex that might help you [eSATResults] feel free to use it.
-	(eSATResults::SAT_NONE has a value of 0)
-	*/
+	OBB a, b;
+	a.c = GetCenterGlobal();
+	a.e = GetHalfWidth();
+	a.u[0] = GetModelMatrix()[0];
+	a.u[1] = GetModelMatrix()[1];
+	a.u[2] = GetModelMatrix()[2];
+
+	b.c = a_pOther->GetCenterGlobal();
+	b.e = a_pOther->GetHalfWidth();
+	b.u[0] = a_pOther->GetModelMatrix()[0];
+	b.u[1] = a_pOther->GetModelMatrix()[1];
+	b.u[2] = a_pOther->GetModelMatrix()[2];
+
+
+
 
 	//there is no axis test that separates this two objects
 	return eSATResults::SAT_NONE;
