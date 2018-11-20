@@ -208,7 +208,6 @@ bool Simplex::MyEntity::SharesDimension(MyEntity* const a_pOther)
 		if(0 == a_pOther->m_nDimensionCount)
 			return true;
 	}
-
 	//special case if there are only one dimension on each MyEntity
 	if (1 == m_nDimensionCount)
 	{

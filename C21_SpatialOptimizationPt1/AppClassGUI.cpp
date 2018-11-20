@@ -38,6 +38,9 @@ void Application::DrawGUI(void)
 			ImGui::TextColored(v4Color, m_sProgrammer.c_str());
 			ImGui::Text("FrameRate: %.2f [FPS] -> %.3f [ms/frame]\n",
 				ImGui::GetIO().Framerate, 1000.0f / ImGui::GetIO().Framerate);
+			ImGui::Text("Levels in Octree: %d\n", divisions);
+			ImGui::Text("Objects: %d\n", objects);
+			ImGui::Separator();
 			ImGui::Text("Control:\n");
 			ImGui::Text("   WASD: Movement\n");
 			ImGui::Text("	 F1: Perspective\n");
@@ -45,7 +48,12 @@ void Application::DrawGUI(void)
 			ImGui::Text("	 F3: Orthographic Y\n");
 			ImGui::Text("	 F4: Orthographic Z\n");
 			ImGui::Separator();
-			ImGui::TextColored(ImColor(255, 255, 0), "Spatial Optimization\n");
+			ImGui::Text("O: Decrement Octree subdivision\n");
+			ImGui::Text("P: Increment Octree subdivision\n");
+			ImGui::Text("L: Enable/Disable grid\n");
+
+			ImGui::Separator();
+			ImGui::TextColored(ImColor(255, 255, 0), "Octree\n");
 		}
 		ImGui::End();
 	}

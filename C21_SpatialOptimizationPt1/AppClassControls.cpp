@@ -78,7 +78,31 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 	case sf::Keyboard::RShift:
 		m_bModifier = true;
 		break;
+	case sf::Keyboard::P:
+		m_pEntityMngr->ClearDimensionSetAll();
+		++divisions;
+		if (divisions > 5)
+			divisions = 5;
+		SafeDelete(m_pRoot);
+		m_pRoot = new MyOctant(divisions,grid);
+		break;
+	case sf::Keyboard::O:
+		if (divisions != 0) {
+			m_pEntityMngr->ClearDimensionSetAll();
+			--divisions;
+			SafeDelete(m_pRoot);
+			m_pRoot = new MyOctant(divisions,grid);
+		}
+		break;
+	case sf::Keyboard::L:
+		grid = !grid;
+		SafeDelete(m_pRoot);
+		m_pRoot = new MyOctant(divisions,grid);
+		break;
 	}
+
+
+
 	
 	//gui
 	gui.io.KeysDown[a_event.key.code] = true;

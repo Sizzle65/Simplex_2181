@@ -19,6 +19,10 @@ void MyEntityManager::Release(void)
 	m_EntityList.clear();
 	m_mEntityArray = nullptr;
 }
+std::vector<MyEntity*> Simplex::MyEntityManager::GetEntityList(void)
+{
+	return m_EntityList;
+}
 MyEntityManager* MyEntityManager::GetInstance()
 {
 	if(m_pInstance == nullptr)
@@ -340,6 +344,18 @@ void Simplex::MyEntityManager::ClearDimensionSet(uint a_uIndex)
 		a_uIndex = m_EntityList.size() - 1;
 
 	return m_EntityList[a_uIndex]->ClearDimensionSet();
+}
+void Simplex::MyEntityManager::ClearDimensionSetAll()
+{
+	//if the list is empty return
+	if (m_EntityList.size() == 0)
+		return;
+
+	for (size_t i = 0; i < m_EntityList.size(); i++)
+	{
+		m_EntityList[i]->ClearDimensionSet();
+	}
+
 }
 void Simplex::MyEntityManager::ClearDimensionSet(String a_sUniqueID)
 {

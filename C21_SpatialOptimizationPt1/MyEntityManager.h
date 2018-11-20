@@ -20,6 +20,7 @@ class MyEntityManager
 	std::vector<MyEntity*> m_EntityList; //entities list
 	PEntity* m_mEntityArray = nullptr; //array of Entity pointers
 public:
+	std::vector<MyEntity*> GetEntityList(void);
 	/*
 	Usage: Gets the singleton pointer
 	Arguments: ---
@@ -192,6 +193,12 @@ public:
 	OUTPUT: ---
 	*/
 	void RemoveDimension(String a_sUniqueID, uint a_uDimension);
+	/*
+	USAGE: will remove all dimensions from all entities
+	ARGUMENTS: ---
+	OUTPUT: ---
+	*/
+	void ClearDimensionSetAll(void);
 	/*
 	USAGE: will remove all dimensions from entity
 	ARGUMENTS: uint a_uIndex -> index (from the list) of the entity queried if < 0 will use the last one
